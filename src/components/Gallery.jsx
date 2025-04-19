@@ -13,7 +13,7 @@ const Gallery = ({ tours, loading, error, onRemove, onRefresh }) => {
         </button>
       </div>
     );
-  };
+  }
 
   return (
     <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">

@@ -10,13 +10,29 @@ const App = () => {
 
   const fetchTours = async () => {
     setLoading(true);
+    setError(null); // Reset error
+
     try {
       const res = await fetch('https://course-api.com/react-tours-project');
+
+      // Check for HTTP errors
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
       const data = await res.json();
+
+      // Check if the response is a valid array
+      if (!Array.isArray(data)) {
+        throw new Error('Invalid data format');
+      }
+
+      console.log('Fetched tours:', data); // ✅ Debug log
       setTours(data);
-      setLoading(false);
     } catch (err) {
-      setError('Error fetching data');
+      console.error('Fetch error:', err.message); // ✅ Helpful error
+      setError('Error fetching data...');
+    } finally {
       setLoading(false);
     }
   };
@@ -30,7 +46,9 @@ const App = () => {
   };
 
   const uniqueDestinations = ['All', ...new Set(tours.map((t) => t.name))];
-  const filteredTours = selected === 'All' ? tours : tours.filter(t => t.name === selected);
+  const filteredTours = selected === 'All'
+    ? tours
+    : tours.filter((t) => t.name === selected);
 
   return (
     <main className="p-4">
